@@ -13,17 +13,16 @@ export default function App() {
   const [images, setImages] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (searchText === '') {
       return;
     }
 
-    setIsLoading(true);
-
     const addImages = async () => {
+      setIsLoading(true);
+      setError('');
       try {
         const data = await getImages(searchText, currentPage);
         if (data.hits.length === 0) {
@@ -36,6 +35,7 @@ export default function App() {
         setIsLoading(false);
       }
     };
+
     addImages();
   }, [currentPage, searchText]);
 
@@ -55,15 +55,14 @@ export default function App() {
   return (
     <Wrap>
       <Toaster />
+      {error && <p> Something went wrong! </p>}
       <Searchbar onSubmit={handleSearch} />
       {images.length > 0 ? (
         <ImageGallery images={images} />
       ) : (
         <p>Image gallery is empty</p>
       )}
-      {images.length > 0 && totalPages !== currentPage && !isLoading && (
-        <Button onClick={loadMore} />
-      )}
+      {images.length > 0 && !isLoading && <Button onClick={loadMore} />}
       {isLoading && <Loader />}
     </Wrap>
   );

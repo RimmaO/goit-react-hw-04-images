@@ -7,7 +7,7 @@ import { ModalContent, Overlay } from './Modal.styled';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export default function Modal({ onClose, image }) {
+export default function Modal({ onClose, largeImageURL, tags }) {
   useEffect(() => {
     const handleKeyDown = event => {
       if (event.code === 'Escape') onClose(); //close modal on click Esc
@@ -29,7 +29,7 @@ export default function Modal({ onClose, image }) {
   return createPortal(
     <Overlay className="overlay" onClick={handleBackdropClick}>
       <ModalContent className="modal">
-        <img src={image.largeImageURL} alt={image.tags} />
+        <img src={largeImageURL} alt={tags} />
       </ModalContent>
     </Overlay>,
     modalRoot
@@ -37,9 +37,7 @@ export default function Modal({ onClose, image }) {
 }
 
 Modal.propTypes = {
-  image: PropTypes.shape({
-    tags: PropTypes.string.isRequired,
-    largeImageURL: PropTypes.string.isRequired,
-  }),
+  tags: PropTypes.string.isRequired,
+  largeImageURL: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
 };
